@@ -132,6 +132,19 @@ def sharpened(image, n):
         sharpened_image['pixels'].append(2 * image['pixels'][i] - blurred_image['pixels'][i])
     return round_and_clip_image(sharpened_image)
 
+def edges(image):
+    kernel_x = [[-1,0,1],
+                [-2,0,2],
+                [-1,0,1]]
+    kernel_y = [[-1,-2,-1],
+                [0,0,0],
+                [1,2,1]]
+    correlated_x = correlate(image, kernel_x)
+    correlated_y = correlate(image, kernel_y)
+    edge_image = {'height': image['height'], 'width': image['width'], 'pixels': []}
+    for i in range(len(image['pixels'])):
+        edge_image['pixels'].append(round(math.sqrt(correlated_x['pixels'][i] ** 2 + correlated_y['pixels'][i] ** 2)))
+    return round_and_clip_image(edge_image)
 # HELPER FUNCTIONS FOR LOADING AND SAVING IMAGES
 
 def load_image(filename):
@@ -202,5 +215,6 @@ if __name__ == '__main__':
                     [0,0,0,0,0,0,0,0,0]]
     # new_image = correlate(image, kernel_final)
     # new_image = round_and_clip_image(new_image)
-    new_image = sharpened(image, 5)
-    save_image(new_image, 'test_results/sharpened_cat.png')
+    # new_image = sharpened(image, 5)
+    new_image = edges(image)
+    save_image(new_image, 'test_results/edge_cat.png')

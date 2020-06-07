@@ -164,7 +164,19 @@ class TestFilters(Lab0Test):
 
     def test_edges_centered_pixel(self):
         # REPLACE THIS with your test case from section 6
-        self.assertTrue(False)
+        exp = {'height': 11, 'width': 11, 'pixels': [0,0,0,0,0,0,0,0,0,0,0,
+                                                     0,0,0,0,0,0,0,0,0,0,0,
+                                                     0,0,0,0,0,0,0,0,0,0,0,
+                                                     0,0,0,0,0,0,0,0,0,0,0,
+                                                     0,0,0,0,255,255,255,0,0,0,0,
+                                                     0,0,0,0,255,0,255,0,0,0,0,
+                                                     0,0,0,0,255,255,255,0,0,0,0,
+                                                     0,0,0,0,0,0,0,0,0,0,0,
+                                                     0,0,0,0,0,0,0,0,0,0,0,
+                                                     0,0,0,0,0,0,0,0,0,0,0,
+                                                     0,0,0,0,0,0,0,0,0,0,0]}
+        image = lab.load_image('test_images/centered_pixel.png')
+        self.compare_images(exp, lab.edges(image))
 
 if __name__ == '__main__':
     res = unittest.main(verbosity=3, exit=False)
