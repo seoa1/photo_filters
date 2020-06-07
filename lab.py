@@ -126,7 +126,11 @@ def blurred_kernel(n):
     return [ ([unit_value] * n) for i in range(n)]
 
 def sharpened(image, n):
-    pass
+    blurred_image = correlate(image, blurred_kernel(n))
+    sharpened_image = {'height': image['height'], 'width': image['width'], 'pixels': []}
+    for i in range(len(blurred_image['pixels'])):
+        sharpened_image['pixels'].append(2 * image['pixels'][i] - blurred_image['pixels'][i])
+    return round_and_clip_image(sharpened_image)
 
 # HELPER FUNCTIONS FOR LOADING AND SAVING IMAGES
 
@@ -176,11 +180,27 @@ if __name__ == '__main__':
     # generating images, etc.
     basic_image = {'height': 1, 'width': 4, 'pixels': [231, 132, 100, 21]}
     image = load_image('test_images/cat.png')
-    kernel1 = [[0,0,0],[0,1,0],[0,0,0]]
-    kernel_average = [[0,0.2,0],[0.2,0.2,0.2],[0,0.2,0,0]]
-    kernel_translate = [[0,0,0,0,0],[0,0,0,0,0],[1,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
-    kernel_final = [[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
+    kernel1 = [[0,0,0],
+               [0,1,0],
+               [0,0,0]]
+    kernel_average = [[0,0.2,0],
+                      [0.2,0.2,0.2],
+                      [0,0.2,0,0]]
+    kernel_translate = [[0,0,0,0,0],
+                        [0,0,0,0,0],
+                        [1,0,0,0,0],
+                        [0,0,0,0,0],
+                        [0,0,0,0,0]]
+    kernel_final = [[0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0],
+                    [1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0]]
     # new_image = correlate(image, kernel_final)
     # new_image = round_and_clip_image(new_image)
-    new_image = blurred(image, 5)
-    save_image(new_image, 'test_results/blurred_cat.png')
+    new_image = sharpened(image, 5)
+    save_image(new_image, 'test_results/sharpened_cat.png')
